@@ -112,6 +112,24 @@ class Config:
         
         print("=" * 40)
 
+    def get_api_url(self) -> str:
+        """
+        Возвращает базовый URL для API
+        
+        Returns:
+            Базовый URL API
+        """
+        return self.settings['repo_url']
+
+    def is_test_mode(self) -> bool:
+        """
+        Проверяет, включен ли режим тестирования
+        
+        Returns:
+            True если включен режим тестирования
+        """
+        return self.settings['test_mode']
+
 
 def create_default_config(config_path: str = "config.ini"):
     """
@@ -125,7 +143,7 @@ def create_default_config(config_path: str = "config.ini"):
     # Секция с настройками
     config['settings'] = {
         'package_name': 'serde',
-        'repo_url': 'https://crates.io/api/v1/crates',
+        'repo_url': 'https://crates.io',
         'test_mode': 'false',
         'output_file': 'graph.svg',
         'max_depth': '5',
