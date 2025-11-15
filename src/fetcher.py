@@ -119,38 +119,30 @@ class CargoAPIFetcher:
     
     def get_direct_dependencies(self, package_name: str) -> List[str]:
         """
-        Получает прямые зависимости пакета (основная функция для этапа 2)
-        
-        Args:
-            package_name: имя пакета для анализа
-            
-        Returns:
-            Список имен прямых зависимостей
-            
-        Raises:
-            Exception: при любых ошибках получения данных
+        Получает прямые зависимости пакета (отдельная функция для использования в графе)
         """
-        print(f"Получение информации о пакете: {package_name}")
-        
-        # Получаем информацию о пакете
-        package_info = self.get_package_info(package_name)
-        
-        # Извлекаем последнюю версию
-        latest_version = self.get_latest_version(package_info)
-        print(f"Последняя версия: {latest_version}")
-        
-        # Получаем зависимости
-        dependencies = self.get_dependencies(package_name, latest_version)
-        
-        # Извлекаем только имена пакетов
-        dependency_names = []
-        for dep in dependencies:
-            # Исключаем зависимости от самого себя (иногда встречается)
-            if dep.get('crate_id') != package_name:
-                dependency_names.append(dep['crate_id'])
-        
-        print(f"Найдено зависимостей: {len(dependency_names)}")
-        return dependency_names
+        try:
+            # получаем информацию о пакете
+            package_info = self.get_package_info(package_name)
+            
+            # извлекаем последнюю версию
+            latest_version = self.get_latest_version(package_info)
+            
+            # получаем зависимости
+            dependencies = self.get_dependencies(package_name, latest_version)
+            
+            # извлекаем только имена пакетов
+            dependency_names = []
+            for dep in dependencies:
+                crate_id = dep.get('crate_id')
+                if crate_id and crate_id != package_name:
+                    dependency_names.append(crate_id)
+            
+            return dependency_names
+            
+        except Exception as e:
+            print(f"Ошибка при получении зависимостей {package_name}: {e}")
+            return []
     
     def display_dependencies(self, package_name: str):
         """
