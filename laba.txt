@@ -1,6 +1,2 @@
-# Добавим репозиторий с бэкпортами
-echo "deb http://deb.debian.org/debian buster-backports main" | sudo tee -a /etc/apt/sources.list
-
-# Обновим и установим
-sudo apt update
-sudo apt install -t buster-backports tree
+wget http://ftp.debian.org/debian/pool/main/t/tree/tree_2.0.4-1_amd64.deb
+sudo dpkg -i tree_*.deb
